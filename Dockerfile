@@ -1,5 +1,7 @@
 FROM keymetrics/pm2:latest-alpine
 
+WORKDIR /app
+
 COPY src src/
 COPY package.json .
 COPY ecosystem.config.js .

@@ -3,7 +3,7 @@
 const path = require('path')
 
 const isProd = process.env.NODE_ENV === 'production'
-const watch = !isProd && path.resolve(__dirname, 'src')
+const watch = isProd ? false : path.resolve(__dirname, 'src')
 
 module.exports = {
   apps: [
