@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+  postgres:
+    environment:
+      NODE_ENV: production
+    image: jobs
+    container_name: jobs-server
+    ports:
+      - '0.0.0.0:9000:9000'
+    volumes:
+      - bucket:/storage
+    networks:
+      - back-end
+
+volumes:
+  bucket:
+
+networks:
+  back-end:
