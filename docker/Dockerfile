@@ -10,6 +10,6 @@ ENV NPM_CONFIG_LOGLEVEL warn
 ENV NODE_ENV production
 RUN yarn install --production
 
-EXPOSE 9000
+EXPOSE 3000
 
 CMD [ "node", "--experimental-modules", "src/index.js" ]

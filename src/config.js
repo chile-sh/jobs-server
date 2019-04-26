@@ -3,7 +3,7 @@ dotenv.config()
 
 const {
   NODE_ENV,
-  PORT = 9000,
+  PORT = 3000,
   SENTRY_DSN,
   REDIS_HOST = '127.0.0.1',
   REDIS_PASS

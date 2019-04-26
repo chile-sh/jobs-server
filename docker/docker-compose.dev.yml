@@ -12,7 +12,8 @@ services:
       NODE_ENV: development
 
     ports:
-      - '0.0.0.0:9000:9000'
+      - '0.0.0.0:3000:3000'
+      - 9229:9229
 
     volumes:
       - $PWD:/opt/app
