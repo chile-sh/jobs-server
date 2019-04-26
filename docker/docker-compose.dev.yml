@@ -1,11 +1,18 @@
 version: '3.1'
 
 services:
-  postgres:
+  jobs-server:
+    build:
+      dockerfile: docker/dev.Dockerfile
     container_name: jobs-server-dev
+    restart: unless-stopped
+
+    env_file: $PWD/.env
     environment:
       NODE_ENV: development
+
     ports:
       - '0.0.0.0:9000:9000'
+
     volumes:
-      - $PWD/src:/app/src
+      - $PWD:/opt/app

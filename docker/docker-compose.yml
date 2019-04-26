@@ -1,20 +1,32 @@
 version: '3.1'
 
 services:
-  postgres:
+  jobs-server:
+    build:
+      context: $PWD
+      dockerfile: docker/Dockerfile
+    image: jobs-build
     environment:
       NODE_ENV: production
-    image: jobs
+      RMQ_USER: $RMQ_USER
+      RMQ_PASS: $RMQ_PASS
+      PG_USER: $PG_USER
+      PG_PASS: $PG_PASS
+      SENTRY_DSN: $SENTRY_DSN
+
     container_name: jobs-server
+    restart: always
     ports:
       - '0.0.0.0:9000:9000'
     volumes:
       - bucket:/storage
     networks:
       - back-end
+      - front-end
 
 volumes:
   bucket:
 
 networks:
   back-end:
+  front-end:
