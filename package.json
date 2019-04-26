@@ -1,11 +1,19 @@
 {
   "name": "jobs-server",
   "version": "1.0.0",
-  "main": "dist/server.js",
+  "type": "module",
+  "main": "src/index.js",
   "license": "MIT",
   "scripts": {
+    "start": "node src/index.js",
+    "docker": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml",
+    "docker:build-dev": "npm run docker -- build",
+    "docker:up": "npm run docker -- up",
+    "docker:down": "npm run docker -- down",
+    "docker:build": "docker-compose -f docker/docker-compose.yml build",
+    "docker:prod": "docker-compose -f docker/docker-compose.yml up -d",
     "test": "npm run lint && ava src/**/*.test.js",
-    "lint": "standard src/**/*.js"
+    "lint": "standard src/**/*.mjs"
   },
   "devDependencies": {
     "ava": "^1.4.1",

@@ -22,16 +22,23 @@ cp .env.example .env
 ## Run and develop using Docker
 
 ```bash
-docker build --no-cache -t jobs .
+yarn docker:build-dev
 
 # Development
-docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up -d
+yarn docker:dev
 
-# to see real-time logs
+# or run it in background
+yarn docker:dev -d
+
+# to see real-time logs when running in background
 docker logs -f jobs-server-dev
+```
 
-# Production
-docker-compose -f docker/docker-compose.yml up -d
+## Run in production
+
+```bash
+# Set environment variables, then
+yarn docker:build && yarn docker:prod
 ```
 
 # License
