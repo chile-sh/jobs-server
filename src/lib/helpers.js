@@ -5,3 +5,5 @@ export const md5 = str =>
     .createHash('md5')
     .update(str)
     .digest('hex')
+
+export const joinDots = (...args) => args.filter(Boolean).join('.')

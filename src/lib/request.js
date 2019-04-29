@@ -19,8 +19,8 @@ const fromCache = async key => {
   return cached
 }
 
-const request = async (url, opts = {}) => {
-  const { ttl, force, method = 'get' } = opts
+export const request = async (url, opts = {}) => {
+  const { ttl, force } = opts
 
   const getOptStr = str => (str ? JSON.stringify(str) : '')
 
@@ -34,18 +34,14 @@ const request = async (url, opts = {}) => {
     'body'
   ]
 
-  const key = md5([url, ...toCache.map(k => getOptStr(opts[k]))].join(';'))
+  const key = md5([url, ...toCache.map(k => getOptStr(opts[k]))].join())
 
   const cached = await fromCache(key)
 
   if (!force && cached) return { ...cached, fromCache: true }
 
   try {
-    const instance = got[method.toLowerCase()]
-    if (!instance) throw Error(`Invalid method ${method}.`)
-
-    const { body, headers, statusCode } = await instance(url, opts)
-
+    const { body, headers, statusCode } = await got(url, opts)
     const data = { body, headers, statusCode }
 
     ttl && cache.set(key, JSON.stringify(data), 'EX', ttl)
