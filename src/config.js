@@ -6,11 +6,14 @@ const {
   PORT = 3000,
   SENTRY_DSN,
   REDIS_HOST = '127.0.0.1',
-  REDIS_PASS
+  REDIS_PASS,
+  RMQ_USER,
+  RMQ_PASS
 } = process.env
 
 export default {
   isProd: NODE_ENV === 'production',
+  appName: 'jobs',
   port: PORT,
   sentry: {
     dsn: SENTRY_DSN
@@ -22,7 +25,9 @@ export default {
   },
 
   rabbitmq: {
-    host: 'amqp://localhost:5672'
+    host: 'localhost:5672',
+    user: RMQ_USER,
+    pass: RMQ_PASS
   },
 
   knexConfig: {
