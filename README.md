@@ -43,4 +43,5 @@ yarn docker:build && yarn docker:prod
 
 # License
 
-MIT
+GNU General Public License v3.0
+
