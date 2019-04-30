@@ -326,10 +326,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@chile-sh/getonbrd-scraper@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@chile-sh/getonbrd-scraper/-/getonbrd-scraper-1.0.5.tgz#e99172e256590db5bff1ab1258a49f115b082aed"
-  integrity sha512-ioqTSqDXS50jYYnjLhIpjrr/NCZlzvbaA0abszDXIBkUs0CUqzyv5aZJjlgDPqiMBRthoGCiljYofjtS1sj5PQ==
+"@chile-sh/getonbrd-scraper@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@chile-sh/getonbrd-scraper/-/getonbrd-scraper-1.1.0.tgz#5cae6d2fb15378b2264987dc28ebeee89eceb25e"
+  integrity sha512-3uVAYddOaZa1TVa+YzGOjzQbOL48VCkR4OOHaSuDIyWyuv8gfHy1zNe2nmucTS6nqhi+fwejAYo4ycEV+EpMcw==
   dependencies:
     cheerio "^1.0.0-rc.3"
     dotenv "^7.0.0"
