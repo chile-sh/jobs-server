@@ -33,4 +33,5 @@ export const run = async () => {
 
   queues.getSalaries.run()
   queues.getJobs.run()
+  queues.getCompany.run()
 }

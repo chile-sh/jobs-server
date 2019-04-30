@@ -326,6 +326,18 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@chilesh/getonbrd-scraper@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@chilesh/getonbrd-scraper/-/getonbrd-scraper-1.0.4.tgz#5fc2ad348525930788f2ae7d99e8b7c872ab3de6"
+  integrity sha512-4tg6kCFlJQk+FNSdsahg1UNVQXu0R23paMLcvTxR9Pj80zIpb/t/0Nr2R6siiRdLV4NhVHanA34xXb3y4vq9tw==
+  dependencies:
+    cheerio "^1.0.0-rc.3"
+    dotenv "^7.0.0"
+    got "^9.6.0"
+    lodash "^4.17.11"
+    qs "^6.7.0"
+    sanitize-html "^1.20.1"
+
 "@concordance/react@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@concordance/react/-/react-2.0.0.tgz#aef913f27474c53731f4fd79cc2f54897de90fde"
