@@ -1,4 +1,4 @@
-import GetOnBrd from '@chilesh/getonbrd-scraper'
+import GetOnBrd from '@chile-sh/getonbrd-scraper'
 
 import { logError } from '../../../lib/logger.js'
 import { defaultClient as redis } from '../../../lib/redis.js'

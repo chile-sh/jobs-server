@@ -1,4 +1,4 @@
-import GetOnBrd from '@chilesh/getonbrd-scraper'
+import GetOnBrd from '@chile-sh/getonbrd-scraper'
 import _ from 'lodash'
 
 import { logError } from '../../../lib/logger.js'
