@@ -1,32 +1,33 @@
 import GetOnBrd from '@chile-sh/getonbrd-scraper'
 
-import { logError } from '../../../lib/logger.js'
 import { defaultClient as redis } from '../../../lib/redis.js'
-import { CACHE_JOBS_MAP_KEY } from '../constants.js'
+import {
+  CACHE_JOBS_MAP_KEY,
+  QUEUE_GET_COMPANIES,
+  CACHE_COMPANIES_KEY
+} from '../constants.js'
+import { sendToQueue } from '../../../lib/amqplib.js'
 
 export default async (msg, ch) => {
-  try {
-    const jobUrl = JSON.parse(msg.content.toString())
-    const exists = await redis.hexists(CACHE_JOBS_MAP_KEY, jobUrl)
+  if (!msg) return false
 
-    if (!exists) {
-      const gob = await GetOnBrd()
-      const jobInfo = await gob.getJob(jobUrl)
-      await redis.hsetJson(CACHE_JOBS_MAP_KEY, jobUrl, jobInfo)
-    }
+  const jobUrl = JSON.parse(msg.content.toString())
+  let jobInfo = await redis.hgetJson(CACHE_JOBS_MAP_KEY, jobUrl)
 
-    ch.ack(msg)
-  } catch (err) {
-    logError(CACHE_JOBS_MAP_KEY, err)
-
-    if (err.response) {
-      switch (err.response.statusCode) {
-        case 404:
-        case 500:
-          return ch.reject(msg, false)
-      }
-    }
-
-    ch.nack(msg)
+  if (!jobInfo) {
+    const gob = await GetOnBrd()
+    jobInfo = await gob.getJob(jobUrl)
+    await redis.hsetJson(CACHE_JOBS_MAP_KEY, jobUrl, jobInfo)
   }
+
+  const companyExists = await redis.hexists(
+    CACHE_COMPANIES_KEY,
+    jobInfo.company.url
+  )
+
+  if (!companyExists) {
+    sendToQueue(ch)(QUEUE_GET_COMPANIES, jobInfo.company.url)
+  }
+
+  await ch.ack(msg)
 }
