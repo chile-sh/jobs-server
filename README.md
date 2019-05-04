@@ -17,6 +17,10 @@ cd jobs-server && yarn
 ```bash
 # Modify with your own env vars
 cp .env.example .env
+
+# Don't forget to set a default getonbrd session
+# You can extract the token from the _getonboard_session cookie on your browser
+GETONBRD_SESSION=...
 ```
 
 ## Run and develop using Docker
