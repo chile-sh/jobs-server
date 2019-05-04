@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { open, sendToQueue } from '../../lib/amqplib.js'
+import { open, sendToQueue, waitForQueuesToEnd } from '../../lib/amqplib.js'
 import { queues } from './queues/index.js'
 import { defaultClient as redis } from '../../lib/redis.js'
 
@@ -8,7 +8,10 @@ import {
   SALARY_RANGE,
   QUEUE_GET_SALARIES,
   CACHE_SALARY_RANGE_KEY,
-  CACHE_JOBS_QUEUED_KEY
+  CACHE_JOBS_QUEUED_KEY,
+  CACHE_SALARIES_MAP_KEY,
+  CACHE_COMPANIES_KEY,
+  CACHE_JOBS_MAP_KEY
 } from './constants.js'
 
 const makeRanges = (from, to, step = SALARY_STEP) =>
@@ -18,17 +21,6 @@ const makeRanges = (from, to, step = SALARY_STEP) =>
   ])
 
 const ranges = makeRanges(...SALARY_RANGE, SALARY_STEP)
-
-const getQueuesInfo = async (ch, allQueues) => {
-  const queues = await Promise.all(
-    allQueues.map(queue => ch.checkQueue(queue.name))
-  )
-
-  return {
-    done: queues.every(queue => queue.messageCount === 0),
-    queues
-  }
-}
 
 export const run = async () => {
   const conn = await open
@@ -45,29 +37,18 @@ export const run = async () => {
     })
   )
 
-  redis.expire(CACHE_SALARY_RANGE_KEY, 3600 * 4)
+  redis.expire(CACHE_COMPANIES_KEY, 3600 * 24 * 7) // one week
+  redis.expire(CACHE_JOBS_MAP_KEY, 3600 * 24 * 2) // 2 days
+  redis.expire(CACHE_SALARY_RANGE_KEY, 3600 * 4) // 4 hours
+
   redis.del(CACHE_JOBS_QUEUED_KEY)
+  redis.del(CACHE_SALARIES_MAP_KEY)
 
   ranges.forEach(range => {
     sendToQueue(ch)(QUEUE_GET_SALARIES, { range, offset: 0 })
   })
 
-  const waitForQueuesToEnd = (interval = 500) =>
-    new Promise(resolve => {
-      const check = async done => {
-        const status = await getQueuesInfo(ch, allQueues)
-        console.log(status)
-
-        if (done) return resolve()
-        if (!status.done) return setTimeout(check, interval)
-
-        setTimeout(() => check(true), 2000)
-      }
-
-      check()
-    })
-
-  waitForQueuesToEnd().then(async () => {
+  waitForQueuesToEnd(ch, allQueues, console.log).then(async () => {
     console.log('deleting queues!')
     await Promise.all(allQueues.map(q => ch.deleteQueue(q.name)))
     redis.del(CACHE_JOBS_QUEUED_KEY)

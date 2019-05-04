@@ -2,6 +2,7 @@ import amqplib from 'amqplib'
 
 import config from '../config.js'
 import logger, { logError } from './logger.js'
+import isFunction from 'lodash/isFunction.js'
 
 const { user, pass, host } = config.rabbitmq
 const url = user && pass ? `amqp://${user}:${pass}@${host}` : `amqp://${host}`
@@ -37,5 +38,37 @@ export const createQueue = async (queueName, opts, onMsg, onError) => {
 
 export const sendToQueue = ch => async (queue, data) =>
   ch.sendToQueue(queue, Buffer.from(JSON.stringify(data)))
+
+export const getQueuesInfo = async (ch, allQueues) => {
+  const queues = await Promise.all(
+    allQueues.map(queue => ch.checkQueue(queue.name))
+  )
+
+  return {
+    done: queues.every(queue => queue.messageCount === 0),
+    queues
+  }
+}
+
+export const waitForQueuesToEnd = (
+  ch,
+  allQueues,
+  onStatus,
+  { interval = 500, waitOnEnd = 2000 } = {}
+) =>
+  new Promise(resolve => {
+    const check = async done => {
+      const status = await getQueuesInfo(ch, allQueues)
+
+      isFunction(onStatus) && onStatus(status)
+
+      if (done) return resolve()
+      if (!status.done) return setTimeout(check, interval)
+
+      setTimeout(() => check(true), waitOnEnd)
+    }
+
+    check()
+  })
 
 export default amqplib
