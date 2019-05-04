@@ -11,11 +11,18 @@ import {
   CACHE_SESSION_KEY,
   CACHE_SALARY_RANGE_KEY
 } from '../constants.js'
+import config from '../../../config.js'
 
 const minMax = arr => [_.min(arr), _.max(arr)]
 
 const gob = (async () => {
-  const session = await redis.get(CACHE_SESSION_KEY)
+  let session = await redis.get(CACHE_SESSION_KEY)
+
+  if (!session) {
+    session = config.bots.getonbrd.session
+    await redis.set(CACHE_SESSION_KEY, session)
+  }
+
   return GetOnBrd(session)
 })()
 

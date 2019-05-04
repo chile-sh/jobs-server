@@ -7,14 +7,23 @@ const {
   SENTRY_DSN,
   REDIS_HOST = '127.0.0.1',
   REDIS_PASS,
+  RMQ_HOST = '127.0.0.1',
   RMQ_USER,
-  RMQ_PASS
+  RMQ_PASS,
+
+  GETONBRD_SESSION
 } = process.env
 
 export default {
   isProd: NODE_ENV === 'production',
   appName: 'jobs',
   port: PORT,
+
+  bots: {
+    getonbrd: {
+      session: GETONBRD_SESSION
+    }
+  },
   sentry: {
     dsn: SENTRY_DSN
   },
@@ -25,7 +34,7 @@ export default {
   },
 
   rabbitmq: {
-    host: 'localhost:5672',
+    host: RMQ_HOST,
     user: RMQ_USER,
     pass: RMQ_PASS
   },

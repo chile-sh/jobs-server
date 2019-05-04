@@ -53,8 +53,7 @@ export const getQueuesInfo = async (ch, allQueues) => {
 export const waitForQueuesToEnd = (
   ch,
   allQueues,
-  onStatus,
-  { interval = 500, waitOnEnd = 2000 } = {}
+  { interval = 1000, waitOnEnd = 5000, onStatus, onEnd } = {}
 ) =>
   new Promise(resolve => {
     const check = async done => {
@@ -62,7 +61,11 @@ export const waitForQueuesToEnd = (
 
       isFunction(onStatus) && onStatus(status)
 
-      if (done) return resolve()
+      if (done) {
+        isFunction(onEnd) && onEnd(status)
+        return resolve(status)
+      }
+
       if (!status.done) return setTimeout(check, interval)
 
       setTimeout(() => check(true), waitOnEnd)

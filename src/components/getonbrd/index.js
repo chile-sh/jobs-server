@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { open, sendToQueue, waitForQueuesToEnd } from '../../lib/amqplib.js'
 import { queues } from './queues/index.js'
 import { defaultClient as redis } from '../../lib/redis.js'
+import logger from '../../lib/logger.js'
 
 import {
   SALARY_STEP,
@@ -11,7 +12,8 @@ import {
   CACHE_JOBS_QUEUED_KEY,
   CACHE_SALARIES_MAP_KEY,
   CACHE_COMPANIES_KEY,
-  CACHE_JOBS_MAP_KEY
+  CACHE_JOBS_MAP_KEY,
+  SOURCE_NAME
 } from './constants.js'
 
 const makeRanges = (from, to, step = SALARY_STEP) =>
@@ -22,7 +24,7 @@ const makeRanges = (from, to, step = SALARY_STEP) =>
 
 const ranges = makeRanges(...SALARY_RANGE, SALARY_STEP)
 
-export const run = async () => {
+export const run = async (onStatus, onEnd) => {
   const conn = await open
   const ch = await conn.createChannel()
 
@@ -48,12 +50,23 @@ export const run = async () => {
     sendToQueue(ch)(QUEUE_GET_SALARIES, { range, offset: 0 })
   })
 
-  waitForQueuesToEnd(ch, allQueues, console.log).then(async () => {
-    console.log('deleting queues!')
-    await Promise.all(allQueues.map(q => ch.deleteQueue(q.name)))
-    redis.del(CACHE_JOBS_QUEUED_KEY)
-    console.log('done!')
+  return waitForQueuesToEnd(ch, allQueues, {
+    onStatus,
+    onEnd: async () => {
+      logger.info(`${SOURCE_NAME} queues finished! Cleaning up...`)
+
+      await Promise.all(allQueues.map(q => ch.deleteQueue(q.name)))
+      await redis.del(CACHE_JOBS_QUEUED_KEY)
+
+      logger.info(
+        `${allQueues
+          .map(q => q.name)
+          .join(', ')} queues, and ${CACHE_JOBS_QUEUED_KEY} key removed`
+      )
+
+      logger.info(`${SOURCE_NAME}: process done!`)
+
+      _.isFunction(onEnd) && onEnd()
+    }
   })
 }
-
-run()
