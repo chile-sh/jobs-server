@@ -1,4 +1,5 @@
 import Knex from 'knex'
-import config from '../knexfile.js'
+import knexConfig from '../knexfile'
+import config from '../config'
 
-export const db = Knex(config.development)
+export default Knex(knexConfig[config.env])

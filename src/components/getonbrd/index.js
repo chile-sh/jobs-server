@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { open, sendToQueue, waitForQueuesToEnd } from '../../lib/amqplib.js'
 import { queues } from './queues/index.js'
 import { defaultClient as redis } from '../../lib/redis.js'
-import logger from '../../lib/logger.js'
+import { logger } from '../../lib/logger.js'
 
 import {
   SALARY_STEP,

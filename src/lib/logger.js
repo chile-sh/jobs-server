@@ -1,12 +1,12 @@
 import pino from 'pino'
 import Sentry from './sentry.js'
+import config from '../config'
 
-const logger = pino()
+export const logger = pino()
 
 export const logError = (err, prefix) => {
   if (!err) return
-  Sentry.captureException(err)
+  if (config.isProd) Sentry.captureException(err)
+
   logger.error(`${prefix || ''}${err.message}`)
 }
-
-export default logger

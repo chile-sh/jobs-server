@@ -1,7 +1,7 @@
 import amqplib from 'amqplib'
 
 import config from '../config.js'
-import logger, { logError } from './logger.js'
+import { logger, logError } from './logger.js'
 import isFunction from 'lodash/isFunction.js'
 
 const { user, pass, host } = config.rabbitmq

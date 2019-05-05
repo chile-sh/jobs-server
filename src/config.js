@@ -1,8 +1,7 @@
-import dotenv from 'dotenv'
-dotenv.config()
+'use strict'
 
 const {
-  NODE_ENV,
+  NODE_ENV = 'development',
   PORT = 3000,
   SENTRY_DSN,
   REDIS_HOST = '127.0.0.1',
@@ -24,6 +23,7 @@ export default {
       session: GETONBRD_SESSION
     }
   },
+
   sentry: {
     dsn: SENTRY_DSN
   },
@@ -47,7 +47,7 @@ export default {
       connection: {
         database: 'jobs',
         user: 'postgres',
-        password: 'admin'
+        password: 'postgres'
       },
       pool: {
         min: 2,

@@ -1,19 +1,19 @@
 {
   "name": "jobs-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "src/index.js",
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
     "docker": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml",
-    "docker:build-dev": "npm run docker -- build",
-    "docker:up": "npm run docker -- up",
-    "docker:down": "npm run docker -- down",
+    "docker:build-dev": "yarn docker build",
+    "docker:up": "yarn docker up",
+    "docker:down": "yarn docker down",
     "docker:build": "docker-compose -f docker/docker-compose.yml build",
     "docker:prod": "docker-compose -f docker/docker-compose.yml up -d",
     "test": "npm run lint && ava src/**/*.test.js",
-    "lint": "standard src/**/*.mjs"
+    "lint": "standard \"src/**/*.js\""
   },
   "devDependencies": {
     "ava": "^1.4.1",
@@ -25,9 +25,13 @@
     "@chile-sh/getonbrd-scraper": "^1.1.0",
     "@sentry/node": "5.1.0",
     "amqplib": "^0.5.3",
+    "apollo-server-fastify": "^2.4.8",
     "cron": "^1.7.1",
     "date-fns": "^1.30.1",
     "dotenv": "^7.0.0",
+    "fastify": "^2.3.0",
+    "fastify-helmet": "^3.0.0",
+    "graphql": "^14.2.1",
     "ioredis": "^4.9.0",
     "knex": "^0.16.5",
     "lodash": "^4.17.11",
