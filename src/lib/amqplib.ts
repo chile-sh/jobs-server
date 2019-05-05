@@ -1,8 +1,8 @@
 import amqplib from 'amqplib'
 
-import config from '../config.js'
-import { logger, logError } from './logger.js'
 import isFunction from 'lodash/isFunction.js'
+import config from '../config.js'
+import { logError, logger } from './logger.js'
 
 const { user, pass, host } = config.rabbitmq
 const url = user && pass ? `amqp://${user}:${pass}@${host}` : `amqp://${host}`
@@ -21,9 +21,9 @@ export const createQueue = async (queueName, opts, onMsg, onError) => {
 
     ch.consume(
       queueName,
-      msg =>
+      (msg: any) =>
         onMsg(msg, ch).catch(
-          err => onError && onError(ch, msg, err, queueName)
+          (err: Error) => onError && onError(ch, msg, err, queueName)
         ),
       { noAck: false }
     )
@@ -36,7 +36,7 @@ export const createQueue = async (queueName, opts, onMsg, onError) => {
   }
 }
 
-export const sendToQueue = ch => async (queue, data) =>
+export const sendToQueue = ch => async (queue: string, data: any) =>
   ch.sendToQueue(queue, Buffer.from(JSON.stringify(data)))
 
 export const getQueuesInfo = async (ch, allQueues) => {
@@ -45,18 +45,25 @@ export const getQueuesInfo = async (ch, allQueues) => {
   )
 
   return {
-    done: queues.every(queue => queue.messageCount === 0),
+    done: queues.every((queue: any) => queue.messageCount === 0),
     queues
   }
+}
+
+interface OptionalParams {
+  interval?: number
+  waitOnEnd?: number
+  onStatus?: Function
+  onEnd?: Function
 }
 
 export const waitForQueuesToEnd = (
   ch,
   allQueues,
-  { interval = 1000, waitOnEnd = 5000, onStatus, onEnd } = {}
+  { interval = 1000, waitOnEnd = 5000, onStatus, onEnd }: OptionalParams = {}
 ) =>
   new Promise(resolve => {
-    const check = async done => {
+    const check = async (done?: boolean) => {
       const status = await getQueuesInfo(ch, allQueues)
 
       isFunction(onStatus) && onStatus(status)
@@ -66,7 +73,9 @@ export const waitForQueuesToEnd = (
         return resolve(status)
       }
 
-      if (!status.done) return setTimeout(check, interval)
+      if (!status.done) {
+        return setTimeout(check, interval)
+      }
 
       setTimeout(() => check(true), waitOnEnd)
     }

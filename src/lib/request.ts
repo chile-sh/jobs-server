@@ -1,17 +1,19 @@
-import got from 'got'
 import cheerio from 'cheerio'
+import got from 'got'
 
-import createClient from './redis.js'
 import { md5 } from '../lib/helpers.js'
+import createClient from './redis.js'
 
 const cache = createClient({ db: 1 })
 
-const fromCache = async key => {
+const fromCache = async (key: string) => {
   const cached = JSON.parse(await cache.get(key))
-  if (!cached) return null
+  if (!cached) {
+    return null
+  }
 
   if (cached.statusCode >= 400) {
-    const err = Error(cached.statusCode)
+    const err: any = Error(cached.statusCode)
     err.response = cached
     throw err
   }
@@ -19,10 +21,10 @@ const fromCache = async key => {
   return cached
 }
 
-export const request = async (url, opts = {}) => {
+export const request = async (url?: string, opts: any = {}) => {
   const { ttl, force } = opts
 
-  const getOptStr = str => (str ? JSON.stringify(str) : '')
+  const getOptStr = (str: string) => (str ? JSON.stringify(str) : '')
 
   const toCache = [
     'baseUrl',
@@ -38,7 +40,9 @@ export const request = async (url, opts = {}) => {
 
   const cached = await fromCache(key)
 
-  if (!force && cached) return { ...cached, fromCache: true }
+  if (!force && cached) {
+    return { ...cached, fromCache: true }
+  }
 
   try {
     const { body, headers, statusCode } = await got(url, opts)
@@ -59,10 +63,10 @@ export const request = async (url, opts = {}) => {
   }
 }
 
-export const dom = async (...args) => {
+export const dom = async (...args: [any]) => {
   const { body } = await request(...args)
   return body && cheerio.load(body)
 }
 
-export const json = async (url, opts = {}) =>
+export const json = async (url: string, opts = {}) =>
   request(url, { ...opts, json: true })

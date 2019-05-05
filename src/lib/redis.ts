@@ -1,7 +1,7 @@
 import Redis from 'ioredis'
 
-import { logError } from './logger.js'
 import config from '../config.js'
+import { logError } from './logger.js'
 
 const createClient = (opts = {}) => {
   const client = new Redis({
@@ -17,7 +17,9 @@ const createClient = (opts = {}) => {
 
   client.hgetJson = async (key, field) => {
     const str = await client.hget(key, field)
-    if (!str) return str
+    if (!str) {
+      return str
+    }
 
     try {
       return JSON.parse(str)

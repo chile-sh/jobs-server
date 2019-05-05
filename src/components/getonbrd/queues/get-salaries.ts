@@ -26,7 +26,7 @@ const gob = (async () => {
   return GetOnBrd(session)
 })()
 
-export default async (msg, ch) => {
+export default async (msg: any, ch: any) => {
   if (!msg) return false
 
   const params = msg.content.toString()
@@ -44,7 +44,7 @@ export default async (msg, ch) => {
   redis.hsetJson(CACHE_SALARY_RANGE_KEY, params, res)
 
   await Promise.all(
-    urls.map(async url => {
+    urls.map(async (url: string) => {
       const prev = await redis.hgetJson(CACHE_SALARIES_MAP_KEY, url)
 
       // get-jobs queue

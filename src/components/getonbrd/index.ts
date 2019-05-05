@@ -16,15 +16,15 @@ import {
   SOURCE_NAME
 } from './constants.js'
 
-const makeRanges = (from, to, step = SALARY_STEP) =>
-  _.times((to - from) / step, num => [
+const makeRanges = (from?: number, to?: number, step: number = SALARY_STEP) =>
+  _.times((to - from) / step, (num: number) => [
     from + step * num,
     from + step * (num + 1)
   ])
 
 const ranges = makeRanges(...SALARY_RANGE, SALARY_STEP)
 
-export const run = async (onStatus, onEnd) => {
+export const run = async (onStatus: Function, onEnd: Function) => {
   const conn = await open
   const ch = await conn.createChannel()
 

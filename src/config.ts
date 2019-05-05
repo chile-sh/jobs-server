@@ -1,4 +1,5 @@
-'use strict'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const {
   NODE_ENV = 'development',
@@ -14,9 +15,10 @@ const {
 } = process.env
 
 export default {
+  env: NODE_ENV,
   isProd: NODE_ENV === 'production',
   appName: 'jobs',
-  port: PORT,
+  port: Number(PORT),
 
   bots: {
     getonbrd: {

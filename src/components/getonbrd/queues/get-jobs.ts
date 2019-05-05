@@ -8,7 +8,7 @@ import {
 } from '../constants.js'
 import { sendToQueue } from '../../../lib/amqplib.js'
 
-export default async (msg, ch) => {
+export default async (msg: any, ch: any) => {
   if (!msg) return false
 
   const jobUrl = JSON.parse(msg.content.toString())

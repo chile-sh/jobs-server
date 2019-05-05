@@ -1,17 +1,14 @@
-import cron from 'cron'
-import { Worker, isMainThread, parentPort, SHARE_ENV } from 'worker_threads'
+import { CronJob } from 'cron'
+import { Worker, isMainThread, parentPort } from 'worker_threads'
 
-import { run as runGetOnBrdQueue } from './scrapers/getonbrd'
+import { run as runGetOnBrdQueue } from './components/getonbrd'
 import { logger } from './lib/logger'
 
-const { CronJob } = cron
-
 if (isMainThread) {
-  // eslint-disable-next-line
   new CronJob(
     '0 18,23 * * *',
     () => {
-      const worker = new Worker(__filename, { env: SHARE_ENV })
+      const worker = new Worker(__filename)
 
       worker.on('message', msg => logger.info(msg))
       worker.on('error', err => logger.error(err.message))
@@ -26,5 +23,8 @@ if (isMainThread) {
     true
   )
 } else {
-  runGetOnBrdQueue(msg => parentPort.postMessage(msg), () => process.exit())
+  runGetOnBrdQueue(
+    (msg: any) => parentPort.postMessage(msg),
+    () => process.exit()
+  )
 }

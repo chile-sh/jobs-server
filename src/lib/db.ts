@@ -1,5 +1,5 @@
 import Knex from 'knex'
-import knexConfig from '../knexfile'
 import config from '../config'
+import knexConfig from '../knexfile'
 
 export default Knex(knexConfig[config.env])

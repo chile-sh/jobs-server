@@ -16,3 +16,4 @@ pids
 
 .env
 node_modules
+build

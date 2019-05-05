@@ -3,7 +3,7 @@ import GetOnBrd from '@chile-sh/getonbrd-scraper'
 import { defaultClient as redis } from '../../../lib/redis.js'
 import { CACHE_COMPANIES_KEY } from '../constants.js'
 
-export default async (msg, ch) => {
+export default async (msg: any, ch: any) => {
   if (!msg) return false
 
   const companyUrl = JSON.parse(msg.content.toString())
