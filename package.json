@@ -2,7 +2,7 @@
   "name": "jobs-server",
   "version": "1.0.1",
   "main": "build/server.js",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "node -r ts-node/register --inspect=5858 src/server.ts",
     "dev": "nodemon",
