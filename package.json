@@ -5,19 +5,19 @@
   "main": "build/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node --inspect=5858 src/server.ts",
+    "start": "node -r ts-node/register --inspect=5858 src/server.ts",
     "dev": "nodemon",
     "build": "rm -rvf build && tsc",
+    "test": "yarn lint && jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint 'src/**/*.@(ts|js|tsx|jsx)'",
+    "lint:fix": "yarn lint --fix",
     "docker": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml",
     "docker:build-dev": "yarn docker build",
     "docker:up": "yarn docker up",
     "docker:down": "yarn docker down",
     "docker:build": "docker-compose -f docker/docker-compose.yml build",
-    "docker:prod": "docker-compose -f docker/docker-compose.yml up -d",
-    "test": "yarn lint && jest",
-    "test:watch": "jest --watch",
-    "lint": "eslint 'src/**/*.@(ts|js|tsx|jsx)'",
-    "lint:fix": "yarn lint --fix"
+    "docker:prod": "docker-compose -f docker/docker-compose.yml up -d"
   },
   "devDependencies": {
     "@types/graphql": "^14.2.0",

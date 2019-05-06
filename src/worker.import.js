@@ -1,6 +1,3 @@
-'use strict'
-
-const path = require('path')
-
-require('ts-node').register()
-require(path.resolve(__dirname, './worker.ts'))
+// We are already using ts-node/register
+// so no need to `require('ts-node').register()`
+require('./worker.ts')
