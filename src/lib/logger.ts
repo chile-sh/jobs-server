@@ -1,6 +1,6 @@
 import pino from 'pino'
 import config from '../config'
-import Sentry from './sentry.js'
+import Sentry from './sentry'
 
 export const logger = pino()
 

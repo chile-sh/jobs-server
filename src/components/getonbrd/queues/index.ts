@@ -1,14 +1,14 @@
-import { createQueue } from '../../../lib/amqplib.js'
+import { createQueue } from '../../../lib/amqplib'
 import {
   QUEUE_GET_JOBS,
   QUEUE_GET_SALARIES,
   QUEUE_GET_COMPANIES
-} from '../constants.js'
+} from '../constants'
 
-import getSalariesCb from './get-salaries.js'
-import getCompaniesCb from './get-companies.js'
-import getJobsCb from './get-jobs.js'
-import { onError } from '../helpers.js'
+import getSalariesCb from './get-salaries'
+import getCompaniesCb from './get-companies'
+import getJobsCb from './get-jobs'
+import { onError } from '../helpers'
 
 export const queues = {
   getSalaries: {

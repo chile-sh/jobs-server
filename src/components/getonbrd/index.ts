@@ -1,8 +1,8 @@
 import _ from 'lodash'
-import { open, sendToQueue, waitForQueuesToEnd } from '../../lib/amqplib.js'
-import { queues } from './queues/index.js'
-import { defaultClient as redis } from '../../lib/redis.js'
-import { logger } from '../../lib/logger.js'
+import { open, sendToQueue, waitForQueuesToEnd } from '../../lib/amqplib'
+import { queues } from './queues/index'
+import { defaultClient as redis } from '../../lib/redis'
+import { logger } from '../../lib/logger'
 
 import {
   SALARY_STEP,
@@ -14,7 +14,7 @@ import {
   CACHE_COMPANIES_KEY,
   CACHE_JOBS_MAP_KEY,
   SOURCE_NAME
-} from './constants.js'
+} from './constants'
 
 const makeRanges = (from?: number, to?: number, step: number = SALARY_STEP) =>
   _.times((to - from) / step, (num: number) => [

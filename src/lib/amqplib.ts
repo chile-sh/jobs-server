@@ -1,8 +1,8 @@
 import amqplib from 'amqplib'
 
-import isFunction from 'lodash/isFunction.js'
-import config from '../config.js'
-import { logError, logger } from './logger.js'
+import isFunction from 'lodash/isFunction'
+import config from '../config'
+import { logError, logger } from './logger'
 
 const { user, pass, host } = config.rabbitmq
 const url = user && pass ? `amqp://${user}:${pass}@${host}` : `amqp://${host}`

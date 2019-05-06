@@ -1,8 +1,8 @@
 import GetOnBrd from '@chile-sh/getonbrd-scraper'
 import _ from 'lodash'
 
-import { sendToQueue } from '../../../lib/amqplib.js'
-import { defaultClient as redis } from '../../../lib/redis.js'
+import { sendToQueue } from '../../../lib/amqplib'
+import { defaultClient as redis } from '../../../lib/redis'
 import {
   QUEUE_GET_SALARIES,
   QUEUE_GET_JOBS,
@@ -10,8 +10,8 @@ import {
   CACHE_JOBS_QUEUED_KEY,
   CACHE_SESSION_KEY,
   CACHE_SALARY_RANGE_KEY
-} from '../constants.js'
-import config from '../../../config.js'
+} from '../constants'
+import config from '../../../config'
 
 const minMax = arr => [_.min(arr), _.max(arr)]
 
