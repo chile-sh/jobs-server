@@ -23,6 +23,8 @@ cp .env.example .env
 GETONBRD_SESSION=...
 ```
 
+> **Note**: If you want to run TypeScript outside docker, set `RMQ_HOST` and `PG_HOST` to `localhost`
+
 ## Run and develop using Docker
 
 ```bash
@@ -38,11 +40,25 @@ yarn docker:dev -d
 docker logs -f jobs-server-dev
 ```
 
+### Run locally without Docker
+
+Live reload with `nodemon`:
+
+```bash
+yarn dev
+```
+
 ## Run in production
 
 ```bash
 # Set environment variables, then
 yarn docker:build && yarn docker:prod
+```
+
+## Test
+
+```bash
+yarn test
 ```
 
 # License
