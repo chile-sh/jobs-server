@@ -1,3 +1,5 @@
 import config from './config'
 
-export default config.knexConfig
+const { development, production } = config.knexConfig
+
+export { development, production }
