@@ -1,6 +1,7 @@
 import GetOnBrd from '@chile-sh/getonbrd-scraper'
 import _ from 'lodash'
 
+import config from '../../../config'
 import { sendToQueue } from '../../../lib/amqplib'
 import { defaultClient as redis } from '../../../lib/redis'
 import {
@@ -11,7 +12,6 @@ import {
   CACHE_SESSION_KEY,
   CACHE_SALARY_RANGE_KEY
 } from '../constants'
-import config from '../../../config'
 
 const minMax = arr => [_.min(arr), _.max(arr)]
 

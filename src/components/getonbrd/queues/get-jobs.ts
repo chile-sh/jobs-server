@@ -1,12 +1,12 @@
 import GetOnBrd from '@chile-sh/getonbrd-scraper'
 
+import { sendToQueue } from '../../../lib/amqplib'
 import { defaultClient as redis } from '../../../lib/redis'
 import {
   CACHE_JOBS_MAP_KEY,
   QUEUE_GET_COMPANIES,
   CACHE_COMPANIES_KEY
 } from '../constants'
-import { sendToQueue } from '../../../lib/amqplib'
 
 export default async (msg: any, ch: any) => {
   if (!msg) return false
