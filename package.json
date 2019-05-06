@@ -1,13 +1,13 @@
 {
   "name": "jobs-server",
   "version": "1.0.1",
-  "type": "module",
   "main": "build/server.js",
   "license": "MIT",
   "scripts": {
     "start": "node -r ts-node/register --inspect=5858 src/server.ts",
     "dev": "nodemon",
     "build": "rm -rvf build && tsc",
+    "serve": "NODE_ENV=production node build/server.js",
     "test": "yarn lint && jest",
     "test:watch": "jest --watch",
     "lint": "eslint 'src/**/*.@(ts|js|tsx|jsx)'",
