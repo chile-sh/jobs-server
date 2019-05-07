@@ -3,8 +3,13 @@ import Redis from 'ioredis'
 import config from '../config'
 import { logError } from './logger'
 
-const createClient = (opts = {}) => {
-  const client = new Redis({
+interface JsonRedis extends Redis.Redis {
+  hsetJson?(key: string, field: string, val: any): Promise<any>
+  hgetJson?(kwy: string, field: string): Promise<any>
+}
+
+const createClient = (opts = {}): JsonRedis => {
+  const client: JsonRedis = new Redis({
     host: config.redis.host,
     password: config.redis.password,
     db: 0,
@@ -12,10 +17,10 @@ const createClient = (opts = {}) => {
     ...opts
   })
 
-  client.hsetJson = (key: string, field: string, val: any) =>
+  client.hsetJson = (key, field, val) =>
     client.hset(key, field, JSON.stringify(val))
 
-  client.hgetJson = async (key: string, field: string) => {
+  client.hgetJson = async (key, field) => {
     const str = await client.hget(key, field)
     if (!str) {
       return str

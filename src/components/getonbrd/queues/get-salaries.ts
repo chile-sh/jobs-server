@@ -13,7 +13,7 @@ import {
   CACHE_SALARY_RANGE_KEY
 } from '../constants'
 
-const minMax = arr => [_.min(arr), _.max(arr)]
+const minMax = (arr: number[]) => [_.min(arr), _.max(arr)]
 
 const gob = (async () => {
   let session = await redis.get(CACHE_SESSION_KEY)

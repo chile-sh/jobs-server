@@ -63,7 +63,7 @@ export const request = async (url?: string, opts: any = {}) => {
   }
 }
 
-export const dom = async (...args: [any]) => {
+export const dom = async (...args: any[]) => {
   const { body } = await request(...args)
   return body && cheerio.load(body)
 }
