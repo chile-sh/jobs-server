@@ -22,7 +22,9 @@ export default {
 
   bots: {
     getonbrd: {
-      session: GETONBRD_SESSION
+      session: GETONBRD_SESSION,
+      cron: '0 18,23 * * *',
+      runOnInit: true
     }
   },
 
