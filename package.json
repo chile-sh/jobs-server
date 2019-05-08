@@ -20,11 +20,13 @@
     "docker:prod": "docker-compose -f docker/docker-compose.yml up -d"
   },
   "devDependencies": {
+    "@types/cron": "^1.7.0",
     "@types/graphql": "^14.2.0",
     "@types/ioredis": "^4.0.10",
     "@types/jest": "^24.0.12",
     "@types/lodash": "^4.14.123",
     "@types/node": "^12.0.0",
+    "@types/pino": "^5.8.7",
     "@typescript-eslint/eslint-plugin": "^1.7.0",
     "@typescript-eslint/parser": "^1.7.0",
     "eslint": "^5.16.0",
