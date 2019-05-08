@@ -11,10 +11,36 @@
     },
     {
       "type": "node",
-      "request": "attach",
-      "name": "Attach to Process",
-      "port": 5858,
+      "request": "launch",
+      "name": "Launch using Nodemon",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/nodemon",
+      "runtimeArgs": ["--inspect=5858", "--inspect-brk"],
+      "stopOnEntry": true,
+      "program": "${workspaceRoot}/src/server.ts",
       "restart": true,
+      "port": 5858,
+      "protocol": "inspector",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "outFiles": ["${workspaceRoot}/build/**/*.js"],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch server",
+      "program": "${workspaceFolder}/src/server.ts",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outputCapture": "std",
+      "outFiles": ["${workspaceFolder}/build/**/*.js"]
+    },
+    {
+      "name": "Current TS File",
+      "type": "node",
+      "request": "launch",
+      "args": ["${relativeFile}"],
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "cwd": "${workspaceRoot}",
       "protocol": "inspector"
     }
   ]
