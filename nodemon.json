@@ -1,6 +1,9 @@
 {
   "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules"],
   "watch": ["src"],
-  "exec": "npm start",
-  "ext": "ts"
+  "verbose": true,
+  "execMap": {
+    "ts": "node --r ts-node/register"
+  },
+  "ext": "js,json,ts"
 }
