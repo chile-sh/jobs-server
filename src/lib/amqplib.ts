@@ -9,13 +9,30 @@ const url = user && pass ? `amqp://${user}:${pass}@${host}` : `amqp://${host}`
 
 export const open = amqplib.connect(url)
 
-export const createQueue = async (queueName, opts, onMsg, onError) => {
+export const createChannel = async (prefetch?: number) => {
+  const conn = await open
+  const ch = await conn.createChannel()
+  prefetch && (await ch.prefetch(prefetch))
+
+  return ch
+}
+
+export const createQueue = (channel?: any) => async (
+  queueName: string,
+  opts?: { prefetch?: number; assert?: any[] },
+  onMsg?: Function,
+  onError?: Function
+) => {
   const { prefetch = 1, assert = [] } = opts
 
   try {
-    const conn = await open
-    const ch = await conn.createChannel()
-    await ch.prefetch(prefetch)
+    let ch = channel
+
+    if (!ch) {
+      const conn = await open
+      ch = await conn.createChannel()
+      await ch.prefetch(prefetch)
+    }
 
     await Promise.all([...assert, queueName].map(q => ch.assertQueue(q)))
 
