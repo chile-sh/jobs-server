@@ -1,93 +1,103 @@
 import * as Knex from 'knex'
 
-import { TABLES } from '../constants'
+import { SCHEMA } from '../constants'
 
-const relate = (table: Knex.TableBuilder) => (name: string, inTable: string) =>
+const relate = (table: Knex.TableBuilder) => (
+  name: string,
+  ref: string,
+  inTable: string
+) =>
   table
     .integer(name)
     .notNullable()
-    .references('id')
+    .references(ref)
     .inTable(inTable)
 
+const {
+  snapshots,
+  companies,
+  jobs,
+  categories,
+  tags,
+  jobsTags,
+  jobsCategories
+} = SCHEMA
+
 export async function up(knex: Knex): Promise<any> {
-  await knex.schema.createTable(TABLES.SNAPSHOTS, table => {
-    table.integer('id').primary()
-    table.timestamp('process_started_at')
-    table.timestamp('process_finished_at')
-    table.json('info')
-    table.json('errors')
-    table.integer('version')
+  await knex.schema.createTable(snapshots.__tableName, table => {
+    table.increments(snapshots.id)
+    table.timestamp(snapshots.processStartedAt)
+    table.timestamp(snapshots.processFinishedAt)
+    table.json(snapshots.info)
+    table.json(snapshots.errors)
+    table.integer(snapshots.version)
     table.timestamps(true, true)
   })
 
-  await knex.schema.createTable(TABLES.COMPANIES, table => {
-    table.integer('id').primary()
-    table.string('name')
-    table.string('slug')
-    table.text('short_description')
-    table.text('description')
-    table.string('logo')
-    table.string('url')
-    table.json('meta')
+  await knex.schema.createTable(companies.__tableName, table => {
+    table.increments(companies.id)
+    table.string(companies.name).index()
+    table.string(companies.slug).unique()
+    table.text(companies.shortDescription)
+    table.text(companies.description)
+    table.string(companies.logo)
+    table.json(companies.meta)
     table.timestamps(true, true)
   })
 
-  await knex.schema.createTable(TABLES.JOBS, table => {
-    table.bigInteger('id').primary()
-    relate(table)('company_id', TABLES.COMPANIES)
+  await knex.schema.createTable(jobs.__tableName, table => {
+    table.increments(jobs.id)
+    relate(table)(jobs.companyId, SCHEMA.companies.id, companies.__tableName)
 
-    table.string('title')
-    table.string('slug')
-    table.string('level')
-    table.string('type')
-    table.bigInteger('salaryFrom')
-    table.bigInteger('salaryTo')
-    table.json('salaries_history')
-    table.date('published_at')
-    table.text('description')
-    table.json('meta')
-    table.integer('version')
+    table.string(jobs.title).index()
+    table.string(jobs.slug).unique()
+    table.string(jobs.level).index()
+    table.string(jobs.type).index()
+    table.bigInteger(jobs.salaryFrom)
+    table.bigInteger(jobs.salaryTo)
+    table.json(jobs.salariesHistory)
+    table.date(jobs.publishedAt)
+    table.text(jobs.description).index()
+    table.json(jobs.meta)
+    table.integer(jobs.version)
     table.timestamps(true, true)
   })
 
-  await knex.schema.createTable(TABLES.CATEGORIES, table => {
-    table.integer('id').primary()
-    table.string('name')
-    table.string('slug')
+  await knex.schema.createTable(categories.__tableName, table => {
+    table.increments(categories.id)
+    table.string(categories.name)
+    table.string(categories.slug)
     table.timestamps(true, true)
   })
 
-  await knex.schema.createTable(TABLES.TAGS, table => {
-    table.integer('id').primary()
-    table.string('name')
+  await knex.schema.createTable(tags.__tableName, table => {
+    table.increments(tags.id)
+    table.string(tags.name).index()
   })
 
-  await knex.schema.createTable(TABLES.JOBS_TAGS, table => {
-    table.bigInteger('id').primary()
-    relate(table)('job_id', TABLES.JOBS)
-    relate(table)('tag_id', TABLES.TAGS)
+  await knex.schema.createTable(jobsTags.__tableName, table => {
+    table.increments(jobsTags.id)
+    relate(table)(jobsTags.jobId, SCHEMA.jobs.id, jobs.__tableName)
+    relate(table)(jobsTags.tagId, SCHEMA.tags.id, tags.__tableName)
   })
 
-  await knex.schema.createTable(TABLES.JOBS_CATEGORIES, table => {
-    table.bigInteger('id').primary()
-    relate(table)('job_id', TABLES.JOBS)
-    relate(table)('category_id', TABLES.CATEGORIES)
-  })
-
-  await knex.schema.createTable(TABLES.JOBS_COMPANIES, table => {
-    table.bigInteger('id').primary()
-    relate(table)('job_id', TABLES.JOBS)
-    relate(table)('company_id', TABLES.COMPANIES)
+  await knex.schema.createTable(jobsCategories.__tableName, table => {
+    table.increments(jobsCategories.id)
+    relate(table)(jobsCategories.jobId, SCHEMA.jobs.id, jobs.__tableName)
+    relate(table)(
+      jobsCategories.categoryId,
+      SCHEMA.categories.id,
+      categories.__tableName
+    )
   })
 }
 
 export async function down(knex: Knex): Promise<any> {
-  await knex.schema.dropTable(TABLES.JOBS_COMPANIES)
-  await knex.schema.dropTable(TABLES.JOBS_CATEGORIES)
-  await knex.schema.dropTable(TABLES.JOBS_TAGS)
-  await knex.schema.dropTable(TABLES.JOBS)
-  await knex.schema.dropTable(TABLES.TAGS)
-  await knex.schema.dropTable(TABLES.CATEGORIES)
-  await knex.schema.dropTable(TABLES.COMPANIES)
-  await knex.schema.dropTable(TABLES.SNAPSHOTS)
+  await knex.schema.dropTable(jobsCategories.__tableName)
+  await knex.schema.dropTable(jobsTags.__tableName)
+  await knex.schema.dropTable(tags.__tableName)
+  await knex.schema.dropTable(snapshots.__tableName)
+  await knex.schema.dropTable(categories.__tableName)
+  await knex.raw(`DROP TABLE ${jobs.__tableName} CASCADE`)
+  await knex.raw(`DROP TABLE ${companies.__tableName} CASCADE`)
 }

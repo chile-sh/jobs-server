@@ -17,7 +17,10 @@
     "docker:up": "yarn docker up",
     "docker:down": "yarn docker down",
     "docker:build": "docker-compose -f docker/docker-compose.yml build",
-    "docker:prod": "docker-compose -f docker/docker-compose.yml up -d"
+    "docker:prod": "docker-compose -f docker/docker-compose.yml up -d",
+    "knex": "cd src && knex --knexfile knexfile.ts",
+    "db:migrate": "yarn knex migrate:latest",
+    "db:rollback": "yarn knex migrate:rollback"
   },
   "devDependencies": {
     "@types/cron": "^1.7.0",
@@ -54,6 +57,7 @@
     "ioredis": "^4.9.0",
     "knex": "^0.16.5",
     "lodash": "^4.17.11",
+    "objection": "^1.6.8",
     "pg": "^7.10.0",
     "winston": "^3.2.1"
   }
