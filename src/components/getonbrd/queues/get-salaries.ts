@@ -1,9 +1,11 @@
 import GetOnBrd from '@chile-sh/getonbrd-scraper'
 import _ from 'lodash'
 
-import config from '../../../config'
-import { sendToQueue } from '../../../lib/amqplib'
-import { defaultClient as redis } from '../../../lib/redis'
+import { sendToQueue } from '@lib/amqplib'
+import { defaultClient as redis } from '@lib/redis'
+
+import config from '@/config'
+
 import {
   QUEUE_GET_SALARIES,
   QUEUE_GET_JOBS,

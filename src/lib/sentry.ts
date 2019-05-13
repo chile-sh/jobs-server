@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/node'
-import config from '../config'
+
+import config from '@/config'
 
 if (config.isProd) {
   Sentry.init({ dsn: config.sentry.dsn })

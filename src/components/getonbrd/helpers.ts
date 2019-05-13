@@ -1,4 +1,4 @@
-import { logError } from '../../lib/logger'
+import { logError } from '@lib/logger'
 
 export const onError = (ch: any, msg: any, err: any, key: string) => {
   if (err.response && err.response.statusCode) {

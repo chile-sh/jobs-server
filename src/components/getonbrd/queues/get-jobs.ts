@@ -1,7 +1,8 @@
 import GetOnBrd from '@chile-sh/getonbrd-scraper'
 
-import { sendToQueue } from '../../../lib/amqplib'
-import { defaultClient as redis } from '../../../lib/redis'
+import { sendToQueue } from '@lib/amqplib'
+import { defaultClient as redis } from '@lib/redis'
+
 import {
   CACHE_JOBS_MAP_KEY,
   QUEUE_GET_COMPANIES,

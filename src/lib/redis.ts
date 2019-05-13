@@ -1,6 +1,6 @@
 import Redis from 'ioredis'
 
-import config from '../config'
+import config from '@/config'
 import { logError } from './logger'
 
 interface CustomRedis extends Redis.Redis {

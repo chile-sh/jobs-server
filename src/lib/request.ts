@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import got from 'got'
 
-import { md5 } from '../lib/helpers'
+import { md5 } from './helpers'
 import createClient from './redis'
 
 const cache = createClient({ db: 1 })

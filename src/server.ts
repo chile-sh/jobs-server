@@ -1,12 +1,12 @@
 import fastify from 'fastify'
 import { CronJob } from 'cron'
 import { Worker } from 'worker_threads'
-import { logger } from './lib/logger'
+import { logger } from '@lib/logger'
 import path from 'path'
 // import { ApolloServer } from 'apollo-server-fastify'
 
-import config from './config'
-import './lib/sentry'
+import config from '@/config'
+import '@lib/sentry'
 
 const initCronJob = (bot: any) => {
   const tz = 'America/Santiago'

@@ -1,8 +1,8 @@
 import Knex from 'knex'
 import { knexSnakeCaseMappers, Model } from 'objection'
 
-import config from '../config'
-import * as knexConfig from '../knexfile'
+import config from '@/config'
+import * as knexConfig from '@/knexfile'
 
 const knex = Knex({
   ...knexConfig[config.env],

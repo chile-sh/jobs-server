@@ -1,6 +1,6 @@
 import GetOnBrd from '@chile-sh/getonbrd-scraper'
 
-import { defaultClient as redis } from '../../../lib/redis'
+import { defaultClient as redis } from '@lib/redis'
 import { CACHE_COMPANIES_KEY } from '../constants'
 
 export default async (msg: any, ch: any) => {

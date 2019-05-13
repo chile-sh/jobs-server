@@ -1,4 +1,4 @@
-import { createQueue } from '../../../lib/amqplib'
+import { createQueue } from '@lib/amqplib'
 import { onError } from '../helpers'
 
 import getSalariesCb from './get-salaries'

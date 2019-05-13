@@ -1,7 +1,7 @@
 import amqplib from 'amqplib'
-
 import isFunction from 'lodash/isFunction'
-import config from '../config'
+
+import config from '@/config'
 import { logError, logger } from './logger'
 
 const { user, pass, host } = config.rabbitmq
