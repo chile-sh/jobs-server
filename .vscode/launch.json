@@ -39,7 +39,12 @@
       "type": "node",
       "request": "launch",
       "args": ["${relativeFile}"],
-      "runtimeArgs": ["-r", "ts-node/register"],
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
       "outputCapture": "std",
       "cwd": "${workspaceRoot}",
       "protocol": "inspector"

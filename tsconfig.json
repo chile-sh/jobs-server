@@ -8,7 +8,13 @@
     "outDir": "./build",
     "baseUrl": "./src",
     "esModuleInterop": true,
-    "allowJs": true
+    "allowJs": true,
+    "paths": {
+      "@/*": ["./*"],
+      "@models/*": ["./models/*"],
+      "@lib/*": ["./lib/*"],
+      "@components/*": ["./components/*"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
