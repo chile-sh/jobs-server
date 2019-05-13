@@ -14,3 +14,5 @@ export const CACHE_SALARY_RANGE_KEY = `${SOURCE_NAME}.salaryRanges`
 export const QUEUE_GET_JOBS = `${SOURCE_NAME}.getJobs`
 export const QUEUE_GET_SALARIES = `${SOURCE_NAME}.getSalaries`
 export const QUEUE_GET_COMPANIES = `${SOURCE_NAME}.getCompanies`
+
+export const CONFIG_MAX_PREFETCH = 8

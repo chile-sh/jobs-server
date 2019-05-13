@@ -11,18 +11,17 @@ import {
   QUEUE_GET_COMPANIES
 } from '../constants'
 
-export const queues = {
+export const makeQueues = async (ch?: any) => ({
   getSalaries: {
     name: QUEUE_GET_SALARIES,
-    run: () =>
-      createQueue(QUEUE_GET_SALARIES, { prefetch: 4 }, getSalariesCb, onError)
+    run: () => createQueue(ch)(QUEUE_GET_SALARIES, {}, getSalariesCb, onError)
   },
   getJobs: {
     name: QUEUE_GET_JOBS,
     run: () =>
-      createQueue(
+      createQueue(ch)(
         QUEUE_GET_JOBS,
-        { assert: [QUEUE_GET_SALARIES], prefetch: 2 },
+        { assert: [QUEUE_GET_SALARIES] },
         getJobsCb,
         onError
       )
@@ -30,11 +29,11 @@ export const queues = {
   getCompany: {
     name: QUEUE_GET_COMPANIES,
     run: () =>
-      createQueue(
+      createQueue(ch)(
         QUEUE_GET_COMPANIES,
-        { assert: [QUEUE_GET_JOBS], prefetch: 2 },
+        { assert: [QUEUE_GET_JOBS] },
         getCompaniesCb,
         onError
       )
   }
-}
+})
