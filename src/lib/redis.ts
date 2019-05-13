@@ -2,15 +2,16 @@ import Redis from 'ioredis'
 
 import config from '@/config'
 import { logError } from './logger'
+import { toSeconds } from './helpers'
 
 interface CustomRedis extends Redis.Redis {
   hsetJson?(key: string, field: string, val: any): Promise<any>
   hgetJson?(key: string, field: string): Promise<any>
   setKeyExp?(
     key: string,
-    seconds: number,
+    timeStr: string | number,
     isHash: boolean,
-    expThreshold?: number
+    expThreshold?: string | number
   ): Promise<any>
 }
 
@@ -43,14 +44,14 @@ const createClient = (opts = {}): CustomRedis => {
    * it will empty the key/hash.
    *
    * @param key
-   * @param seconds
+   * @param timeStr any `ms` lib compatible string, any integer will be in seconds
    * @param isHash
-   * @param expThreshold EXP in seconds
+   * @param expThreshold same as timeStr
    *
    * @example
-   *  redis.setKeyExp('cache', 3600 * 24, true, 3600)
+   *  redis.setKeyExp('cache', '1 day', true, 3600)
    */
-  client.setKeyExp = async (key, seconds, isHash, expThreshold = 0) => {
+  client.setKeyExp = async (key, timeStr, isHash, expThreshold = 0) => {
     const create = () =>
       isHash ? client.hset(key, '', '') : client.set(key, '')
 
@@ -58,10 +59,10 @@ const createClient = (opts = {}): CustomRedis => {
     if (!exists) await create()
 
     const ttl = await client.ttl(key)
-    if (ttl < expThreshold) {
+    if (ttl < toSeconds(expThreshold)) {
       await client.del(key)
       await create()
-      return client.expire(key, seconds)
+      return client.expire(key, toSeconds(timeStr))
     }
   }
 
