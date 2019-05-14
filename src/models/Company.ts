@@ -5,7 +5,7 @@ import Job from './Job'
 
 import { SCHEMA_JOIN as SCHEMA } from '../constants'
 
-export default class Category extends Model {
+export default class Company extends Model {
   readonly id!: number
   name: string
   slug: string
@@ -16,7 +16,7 @@ export default class Category extends Model {
 
   jobs?: Job[]
 
-  static tableName = SCHEMA.categories.__tableName
+  static tableName = SCHEMA.companies.__tableName
 
   static relationMappings = () => ({
     jobs: {

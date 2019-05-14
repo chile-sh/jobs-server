@@ -16,15 +16,11 @@ export default class Category extends Model {
 
   static relationMappings = () => ({
     jobs: {
-      relation: Model.ManyToManyRelation,
+      relation: Model.HasManyRelation,
       modelClass: join(__dirname, 'Job'),
       join: {
         from: SCHEMA.categories.id,
-        through: {
-          from: SCHEMA.jobsCategories.categoryId,
-          to: SCHEMA.jobsCategories.jobId
-        },
-        to: SCHEMA.jobs.id
+        to: SCHEMA.jobs.categoryId
       }
     }
   })

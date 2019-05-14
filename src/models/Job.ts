@@ -4,6 +4,7 @@ import { join } from 'path'
 import Company from './Company'
 import Category from './Category'
 import Tag from './Tag'
+import City from './City'
 
 import { SCHEMA_JOIN as SCHEMA } from '../constants'
 
@@ -22,12 +23,22 @@ export default class Job extends Model {
   version: number
 
   company: Company
-  categories: Category[]
+  category: Category
   tags?: Tag[]
+  city: City
 
   static tableName = SCHEMA.jobs.__tableName
 
   static relationMappings = () => ({
+    city: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: join(__dirname, 'City'),
+      join: {
+        from: SCHEMA.jobs.cityId,
+        to: SCHEMA.cities.id
+      }
+    },
+
     company: {
       relation: Model.BelongsToOneRelation,
       modelClass: join(__dirname, 'Company'),
@@ -43,22 +54,18 @@ export default class Job extends Model {
       join: {
         from: SCHEMA.jobs.id,
         through: {
-          from: SCHEMA.jobsCategories.jobId,
-          to: SCHEMA.jobsCategories.categoryId
+          from: SCHEMA.jobsTags.jobId,
+          to: SCHEMA.jobsTags.tagId
         },
-        to: SCHEMA.categories.id
+        to: SCHEMA.tags.id
       }
     },
 
-    categories: {
-      relation: Model.ManyToManyRelation,
+    category: {
+      relation: Model.BelongsToOneRelation,
       modelClass: join(__dirname, 'Category'),
       join: {
-        from: SCHEMA.jobs.id,
-        through: {
-          from: SCHEMA.jobsCategories.jobId,
-          to: SCHEMA.jobsCategories.categoryId
-        },
+        from: SCHEMA.jobs.categoryId,
         to: SCHEMA.categories.id
       }
     }
