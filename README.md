@@ -4,6 +4,12 @@ Simple job searching and listing tool, it scrapes jobs from [getonbrd](https://w
 
 For an easier development, use [this docker-compose config](https://github.com/chile-sh/docker-common), since it comes with Postgres, RabbitMQ, and Redis, with the default environment variables used on the example env file, and the same network config.
 
+## Pre-requisites
+
+- Node 11+
+- Yarn
+- Docker (with docker-compose)
+
 ## Clone & Install
 
 ```bash
@@ -25,7 +31,15 @@ GETONBRD_SESSION=...
 
 > **Note**: If you want to run TypeScript outside docker, set `RMQ_HOST` and `PG_HOST` to `localhost`
 
-## Run and develop using Docker
+### Run
+
+Live reload with `nodemon`:
+
+```bash
+yarn dev
+```
+
+## Run and develop using Docker (TODO)
 
 ```bash
 yarn docker:build-dev
@@ -38,14 +52,6 @@ yarn docker:dev -d
 
 # to see real-time logs when running in background
 docker logs -f jobs-server-dev
-```
-
-### Run locally without Docker
-
-Live reload with `nodemon`:
-
-```bash
-yarn dev
 ```
 
 ## Run in production
