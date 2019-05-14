@@ -4,7 +4,8 @@
   "main": "build/server.js",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "node -r ts-node/register --inspect=5858 src/server.ts",
+    "ts-node": "node -r tsconfig-paths/register -r ts-node/register",
+    "start": "yarn ts-node --inspect=5858 src/server.ts",
     "dev": "nodemon",
     "build": "rm -rvf build && tsc",
     "serve": "NODE_ENV=production node build/server.js",
@@ -18,7 +19,7 @@
     "docker:down": "yarn docker down",
     "docker:build": "docker-compose -f docker/docker-compose.yml build",
     "docker:prod": "docker-compose -f docker/docker-compose.yml up -d",
-    "knex": "cd src && knex --knexfile knexfile.ts",
+    "knex": "yarn ts-node node_modules/.bin/knex --cwd src --knexfile knexfile.ts",
     "db:migrate": "yarn knex migrate:latest",
     "db:rollback": "yarn knex migrate:rollback"
   },
@@ -47,7 +48,7 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
-    "@chile-sh/getonbrd-scraper": "^1.1.0",
+    "@chile-sh/getonbrd-scraper": "^2.1.0",
     "@sentry/node": "5.1.0",
     "@types/ms": "^0.7.30",
     "amqplib": "^0.5.3",
