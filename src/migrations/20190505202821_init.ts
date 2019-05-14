@@ -2,6 +2,17 @@ import * as Knex from 'knex'
 
 import { SCHEMA } from '../constants'
 
+const {
+  cities,
+  countries,
+  snapshots,
+  companies,
+  jobs,
+  categories,
+  tags,
+  jobsTags
+} = SCHEMA
+
 const relate = (table: Knex.TableBuilder) => (
   name: string,
   ref: string,
@@ -13,17 +24,20 @@ const relate = (table: Knex.TableBuilder) => (
     .references(ref)
     .inTable(inTable)
 
-const {
-  snapshots,
-  companies,
-  jobs,
-  categories,
-  tags,
-  jobsTags,
-  jobsCategories
-} = SCHEMA
+const dropCascade = (knex, table) => knex.raw(`DROP TABLE ${table} CASCADE`)
 
 export async function up(knex: Knex): Promise<any> {
+  await knex.schema.createTable(countries.__tableName, table => {
+    table.increments(countries.id)
+    table.string(countries.name)
+  })
+
+  await knex.schema.createTable(cities.__tableName, table => {
+    table.increments(cities.id)
+    table.string(cities.name)
+    relate(table)(cities.countryId, countries.id, countries.__tableName)
+  })
+
   await knex.schema.createTable(snapshots.__tableName, table => {
     table.increments(snapshots.id)
     table.timestamp(snapshots.processStartedAt)
@@ -45,9 +59,18 @@ export async function up(knex: Knex): Promise<any> {
     table.timestamps(true, true)
   })
 
+  await knex.schema.createTable(categories.__tableName, table => {
+    table.increments(categories.id)
+    table.string(categories.name)
+    table.string(categories.slug)
+    table.timestamps(true, true)
+  })
+
   await knex.schema.createTable(jobs.__tableName, table => {
     table.increments(jobs.id)
-    relate(table)(jobs.companyId, SCHEMA.companies.id, companies.__tableName)
+    relate(table)(jobs.companyId, companies.id, companies.__tableName)
+    relate(table)(jobs.cityId, cities.id, cities.__tableName)
+    relate(table)(jobs.categoryId, categories.id, categories.__tableName)
 
     table.string(jobs.title).index()
     table.string(jobs.slug).unique()
@@ -63,13 +86,6 @@ export async function up(knex: Knex): Promise<any> {
     table.timestamps(true, true)
   })
 
-  await knex.schema.createTable(categories.__tableName, table => {
-    table.increments(categories.id)
-    table.string(categories.name)
-    table.string(categories.slug)
-    table.timestamps(true, true)
-  })
-
   await knex.schema.createTable(tags.__tableName, table => {
     table.increments(tags.id)
     table.string(tags.name).index()
@@ -77,27 +93,18 @@ export async function up(knex: Knex): Promise<any> {
 
   await knex.schema.createTable(jobsTags.__tableName, table => {
     table.increments(jobsTags.id)
-    relate(table)(jobsTags.jobId, SCHEMA.jobs.id, jobs.__tableName)
-    relate(table)(jobsTags.tagId, SCHEMA.tags.id, tags.__tableName)
-  })
-
-  await knex.schema.createTable(jobsCategories.__tableName, table => {
-    table.increments(jobsCategories.id)
-    relate(table)(jobsCategories.jobId, SCHEMA.jobs.id, jobs.__tableName)
-    relate(table)(
-      jobsCategories.categoryId,
-      SCHEMA.categories.id,
-      categories.__tableName
-    )
+    relate(table)(jobsTags.jobId, jobs.id, jobs.__tableName)
+    relate(table)(jobsTags.tagId, tags.id, tags.__tableName)
   })
 }
 
 export async function down(knex: Knex): Promise<any> {
-  await knex.schema.dropTable(jobsCategories.__tableName)
-  await knex.schema.dropTable(jobsTags.__tableName)
-  await knex.schema.dropTable(tags.__tableName)
-  await knex.schema.dropTable(snapshots.__tableName)
-  await knex.schema.dropTable(categories.__tableName)
-  await knex.raw(`DROP TABLE ${jobs.__tableName} CASCADE`)
-  await knex.raw(`DROP TABLE ${companies.__tableName} CASCADE`)
+  await dropCascade(knex, jobsTags.__tableName)
+  await dropCascade(knex, tags.__tableName)
+  await dropCascade(knex, snapshots.__tableName)
+  await dropCascade(knex, jobs.__tableName)
+  await dropCascade(knex, companies.__tableName)
+  await dropCascade(knex, categories.__tableName)
+  await dropCascade(knex, countries.__tableName)
+  await dropCascade(knex, cities.__tableName)
 }

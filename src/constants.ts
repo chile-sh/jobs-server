@@ -2,11 +2,24 @@ const makeDbSchema = (joinColumns?: boolean) => {
   const id = 'id'
 
   const tables = {
+    countries: {
+      __tableName: 'countries',
+      id,
+      name: 'name'
+    },
+    cities: {
+      __tableName: 'cities',
+      id,
+      name: 'name',
+      countryId: 'country_id'
+    },
     jobs: {
       __tableName: 'jobs',
       __timestamps: true,
       id,
       companyId: 'company_id',
+      cityId: 'city_id',
+      categoryId: 'category_id',
       title: 'title',
       slug: 'slug',
       level: 'level',
@@ -51,12 +64,6 @@ const makeDbSchema = (joinColumns?: boolean) => {
       id,
       name: 'name'
     },
-    jobsCategories: {
-      __tableName: 'jobs_categories',
-      id,
-      jobId: 'job_id',
-      categoryId: 'category_id'
-    },
     jobsTags: {
       __tableName: 'jobs_tags',
       id,
@@ -74,7 +81,7 @@ const makeDbSchema = (joinColumns?: boolean) => {
 
     if (joinColumns) {
       for (const columnKey in table) {
-        if (columnKey === 'tableName') continue
+        if (columnKey === '__tableName') continue
         const column = table[columnKey]
         tables[tableKey][columnKey] = [table.__tableName, column].join('.')
       }
