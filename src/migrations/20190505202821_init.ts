@@ -29,13 +29,14 @@ const dropCascade = (knex, table) => knex.raw(`DROP TABLE ${table} CASCADE`)
 export async function up(knex: Knex): Promise<any> {
   await knex.schema.createTable(countries.__tableName, table => {
     table.increments(countries.id)
-    table.string(countries.name)
+    table.string(countries.name).unique()
   })
 
   await knex.schema.createTable(cities.__tableName, table => {
     table.increments(cities.id)
     table.string(cities.name)
     relate(table)(cities.countryId, countries.id, countries.__tableName)
+    table.unique([cities.countryId, cities.name])
   })
 
   await knex.schema.createTable(snapshots.__tableName, table => {
@@ -80,7 +81,7 @@ export async function up(knex: Knex): Promise<any> {
     table.bigInteger(jobs.salaryTo)
     table.json(jobs.salariesHistory)
     table.date(jobs.publishedAt)
-    table.text(jobs.description).index()
+    table.text(jobs.description)
     table.json(jobs.meta)
     table.integer(jobs.version)
     table.timestamps(true, true)

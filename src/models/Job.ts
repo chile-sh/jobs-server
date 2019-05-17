@@ -16,10 +16,10 @@ export default class Job extends Model {
   type: string
   salaryFrom?: number
   salaryTo?: number
-  salariesHistory: { date: Date; range: [number, number] }[]
+  salariesHistory?: { date: Date; range: [number, number] }[] | string
   publishedAt: Date
   description: string
-  meta?: {}
+  meta?: {} | string
   version: number
 
   company: Company
