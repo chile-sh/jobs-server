@@ -1,6 +1,6 @@
 export const SOURCE_NAME = 'getonbrd'
 export const SALARY_STEP = 50
-export const SALARY_RANGE = [500, 7000]
+export const SALARY_RANGE = [400, 10000]
 
 export const CACHE_CONFIG_KEY = `${SOURCE_NAME}.config`
 export const CACHE_CSFR_KEY = `${SOURCE_NAME}.csfr`

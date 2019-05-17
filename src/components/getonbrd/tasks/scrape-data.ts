@@ -52,7 +52,11 @@ export const run = async (onStatus?: Function, onEnd?: Function) => {
     redis.del(CACHE_SALARIES_MAP_KEY)
   ])
 
-  ranges.forEach(range =>
+  // Get min and max items to exclude their salary
+  // since they appear on the entire range
+  const fullRange = [[0, 0], [20000, 20000], ...ranges]
+
+  fullRange.forEach(range =>
     sendToQueue(ch)(QUEUE_GET_SALARIES, { range, offset: 0 })
   )
 
