@@ -1,6 +1,6 @@
 import * as Knex from 'knex'
 
-import { SCHEMA } from '../constants'
+import { SCHEMA } from '@common/constants'
 
 const {
   cities,
@@ -89,7 +89,7 @@ export async function up(knex: Knex): Promise<any> {
 
   await knex.schema.createTable(tags.__tableName, table => {
     table.increments(tags.id)
-    table.string(tags.name).index()
+    table.string(tags.name).unique()
   })
 
   await knex.schema.createTable(jobsTags.__tableName, table => {

@@ -11,9 +11,8 @@
     "allowJs": true,
     "paths": {
       "@/*": ["./*"],
-      "@models/*": ["./models/*"],
-      "@lib/*": ["./lib/*"],
-      "@components/*": ["./components/*"]
+      "@components/*": ["./components/*"],
+      "@common/*": ["../node_modules/@chile-sh/jobs-common/build/*"]
     }
   },
   "include": ["src/**/*.ts"],

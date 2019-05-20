@@ -1,14 +1,14 @@
 {
   "name": "jobs-server",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "main": "build/server.js",
   "license": "GPL-3.0",
   "scripts": {
-    "ts-node": "node -r tsconfig-paths/register -r ts-node/register",
+    "ts-node": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config",
     "start": "yarn ts-node --inspect=5858 src/server.ts",
     "dev": "nodemon",
     "build": "rm -rvf build && tsc",
-    "serve": "NODE_ENV=production node build/server.js",
+    "serve": "node build/server.js",
     "test": "yarn lint && jest",
     "test:watch": "jest --watch",
     "lint": "eslint 'src/**/*.@(ts|js|tsx|jsx)'",
@@ -24,16 +24,13 @@
     "db:rollback": "yarn knex migrate:rollback"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.11",
-    "@types/cron": "^1.7.0",
+    "@chile-sh/eslint-config-ts": "^2.2.0",
     "@types/dotenv": "^6.1.1",
-    "@types/got": "^9.4.4",
     "@types/graphql": "^14.2.0",
     "@types/ioredis": "^4.0.10",
     "@types/jest": "^24.0.12",
     "@types/lodash": "^4.14.123",
     "@types/node": "^12.0.0",
-    "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^1.7.0",
     "@typescript-eslint/parser": "^1.7.0",
     "eslint": "^5.16.0",
@@ -49,23 +46,11 @@
   },
   "dependencies": {
     "@chile-sh/getonbrd-scraper": "^3.0.2",
+    "@chile-sh/jobs-common": "^1.2.0",
     "@sentry/node": "5.1.0",
-    "@types/ms": "^0.7.30",
-    "amqplib": "^0.5.3",
-    "apollo-server": "^2.4.8",
-    "apollo-server-fastify": "^2.4.8",
-    "cron": "^1.7.1",
-    "date-fns": "^1.30.1",
+    "apollo-server": "^2.5.0",
     "dotenv": "^7.0.0",
-    "fastify": "^2.3.0",
-    "fastify-helmet": "^3.0.0",
-    "graphql": "^14.2.1",
-    "ioredis": "^4.9.0",
-    "knex": "^0.16.5",
-    "lodash": "^4.17.11",
-    "ms": "^2.1.1",
-    "objection": "^1.6.8",
-    "pg": "^7.10.0",
-    "winston": "^3.2.1"
+    "graphql": "^14.3.0",
+    "knex": "^0.16.5"
   }
 }
