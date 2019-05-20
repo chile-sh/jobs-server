@@ -23,13 +23,7 @@ cd jobs-server && yarn
 ```bash
 # Modify with your own env vars
 cp .env.example .env
-
-# Don't forget to set a default getonbrd session
-# You can extract the token from the _getonboard_session cookie on your browser
-GETONBRD_SESSION=...
 ```
-
-> **Note**: If you want to run TypeScript outside docker, set `RMQ_HOST` and `PG_HOST` to `localhost`
 
 ### Run
 
