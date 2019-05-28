@@ -17,3 +17,6 @@ pids
 .env
 node_modules
 build
+
+yalc.lock
+.yalc
