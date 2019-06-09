@@ -26,13 +26,21 @@
       "sourceMaps": true
     },
     {
+      "name": "Launch Server",
       "type": "node",
       "request": "launch",
-      "name": "Launch server",
-      "program": "${workspaceFolder}/src/server.ts",
-      "preLaunchTask": "tsc: build - tsconfig.json",
+      "args": ["src/server.ts"],
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register",
+        "-r",
+        "dotenv/config"
+      ],
       "outputCapture": "std",
-      "outFiles": ["${workspaceFolder}/build/**/*.js"]
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector"
     },
     {
       "name": "Current TS File",
