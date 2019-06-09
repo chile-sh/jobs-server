@@ -1,14 +1,21 @@
-import { QueryBuilder } from 'knex'
-
 import Job from '@common/models/Job'
 import Category from '@common/models/Category'
 import City from '@common/models/City'
+import Company from '@common/models/Company'
+import { QueryBuilder } from 'objection'
 
 const getFields = node =>
   node.selectionSet.selections.map(sel => sel.name.value)
 
+const createQuery = (builder: QueryBuilder<any>, join?) => (args: any = {}) =>
+  builder
+    .skipUndefined()
+    .joinEager(join)
+    .limit(args.limit)
+    .offset(args.offset)
+
 const createJobQuery = (args, info) => (gqlNode = 'jobs') => {
-  const { limit, offset, salaryFrom, salaryTo, title } = args
+  const { salaryFrom, salaryTo, title } = args
   let joins = []
 
   const fields = getFields(info.fieldNodes.find(n => n.name.value === gqlNode))
@@ -25,17 +32,16 @@ const createJobQuery = (args, info) => (gqlNode = 'jobs') => {
 
   const joinStr = joins.length ? `[${joins.join(',')}]` : undefined
 
-  let qry = Job.query()
-    .skipUndefined()
-    .joinEager(joinStr)
-    .limit(limit)
-    .offset(offset)
-    .where('jobs.version', '>=', (builder: QueryBuilder) => {
+  let qry = createQuery(Job.query(), joinStr)(args).where(
+    'jobs.version',
+    '>=',
+    (builder: QueryBuilder<Job>) => {
       builder
         .max('version')
         .from('snapshots')
         .where('current', true)
-    })
+    }
+  )
 
   if (typeof salaryFrom !== 'undefined') {
     qry = qry.andWhere('salary_from', '>=', salaryFrom)
@@ -69,7 +75,9 @@ export default {
     if (slug) return qry.where('jobs.slug', slug).first()
   },
 
-  categories: () => Category.query(),
+  categories: (_, args) => createQuery(Category.query())(args),
 
-  cities: () => City.query()
+  companies: (_, args) => createQuery(Company.query(), 'logoAsset')(args),
+
+  cities: (_, args) => createQuery(City.query(), 'country')(args)
 }

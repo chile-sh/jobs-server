@@ -111,6 +111,7 @@ type Query {
     salaryTo: Int
   ): [Job!]
   getJob(slug: String, id: ID): Job!
-  categories: [Category!]
-  cities: [City!]
+  categories(limit: Int, offset: Int): [Category!]
+  companies(limit: Int, offset: Int): [Company!]
+  cities(limit: Int, offset: Int): [City!]
 }
